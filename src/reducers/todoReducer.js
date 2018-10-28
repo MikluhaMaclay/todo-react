@@ -4,16 +4,17 @@ import moment from 'moment'
 
 const initialState = {
     todos: [
-        {id: 1, name: 'Homework', description: 'Do homework', importance: 'normal', shouldCompleteAt: moment(), completedAt: null},
-        {id: 2, name: 'Milk', description: 'Buy milk', importance: 'important', shouldCompleteAt: moment(), completedAt: null},
-        {id: 3, name: 'Music', description: 'Listen music', importance: 'very important', shouldCompleteAt: moment(), completedAt: null},
+        { id: 1, name: 'Homework', description: 'Do homework', importance: 'normal', shouldCompleteAt: moment(), completedAt: null },
+        { id: 2, name: 'Milk', description: 'Buy milk', importance: 'important', shouldCompleteAt: moment(), completedAt: null },
+        { id: 3, name: 'Music', description: 'Listen music', importance: 'very important', shouldCompleteAt: moment(), completedAt: null },
     ],
     time: moment(),
     filter: 'all'
 }
 
-export default function(state = initialState, action) {
-    switch(action.type) {
+export default function (state = initialState, action) {
+
+    switch (action.type) {
         case GET_TODOS:
             return {
                 ...state
@@ -26,15 +27,14 @@ export default function(state = initialState, action) {
             }
         case ADD_TODO:
             return {
+                ...state,
                 todos: [...state.todos, action.payload]
             }
         case COMPLETE_TODO:
-            console.log(action.payload)
             return {
                 ...state,
                 todos: state.todos.map(todo => {
                     if (todo.id === action.payload) {
-                        console.log(todo)
                         todo.completedAt = moment();
                     }
                     return todo;
@@ -51,7 +51,6 @@ export default function(state = initialState, action) {
                 })
             }
         case UPDATE_TIME:
-        console.log("updated")
             return {
                 ...state,
                 time: moment()
