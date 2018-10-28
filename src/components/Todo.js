@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { ListGroupItem, Button } from 'reactstrap';
 import { connect } from "react-redux";
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { deleteTodo, editTodo } from '../actions/todoActions';
+import * as actions from '../actions/todoActions';
 
 class Todo extends Component {
 
     deleteHandler = () => {
-        console.log(this.props)
         this.props.deleteTodo(this.props.todo.id);
     }
   render() {
@@ -37,6 +36,10 @@ class Todo extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    deleteTodo: id => {
+        dispatch(actions.deleteTodo(id))
+    }
+})
 
-
-export default connect(null , { deleteTodo, editTodo })(Todo);
+export default connect(null , mapDispatchToProps)(Todo);

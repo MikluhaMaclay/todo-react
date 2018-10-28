@@ -1,12 +1,14 @@
-import { GET_TODOS, DELETE_TODO, ADD_TODO, COMPLETE_TODO, EDIT_TODO } from '../actions/types';
+import { GET_TODOS, DELETE_TODO, ADD_TODO, COMPLETE_TODO, EDIT_TODO, UPDATE_TIME } from '../actions/types';
+import { classNamesShape } from 'reactstrap';
+import moment from 'moment'
 
 const initialState = {
     todos: [
-        {id: 1, name: 'Homework', description: 'Do homework', importance: 'normal', shouldCompleteAt: new Date().setDate(Date.now()+1), completedAt: Date.now()},
-        {id: 2, name: 'Milk', description: 'Buy milk', importance: 'important', shouldCompleteAt: new Date().setDate(Date.now()-1), completedAt: Date.now()},
-        {id: 3, name: 'Music', description: 'Listen music', importance: 'very important', shouldCompleteAt: new Date().setDate(Date.now()+2), completedAt: Date.now()},
+        {id: 1, name: 'Homework', description: 'Do homework', importance: 'normal', shouldCompleteAt: moment(), completedAt: null},
+        {id: 2, name: 'Milk', description: 'Buy milk', importance: 'important', shouldCompleteAt: moment(), completedAt: null},
+        {id: 3, name: 'Music', description: 'Listen music', importance: 'very important', shouldCompleteAt: moment(), completedAt: null},
     ],
-    time: Date.now(),
+    time: moment(),
     filter: 'all'
 }
 
@@ -17,7 +19,7 @@ export default function(state = initialState, action) {
                 ...state
             }
         case DELETE_TODO:
-        console.log(state)
+            console.log(action.payload)
             return {
                 ...state,
                 todos: state.todos.filter(todo => todo.id !== action.payload)
@@ -27,11 +29,13 @@ export default function(state = initialState, action) {
                 todos: [...state.todos, action.payload]
             }
         case COMPLETE_TODO:
+            console.log(action.payload)
             return {
                 ...state,
                 todos: state.todos.map(todo => {
-                    if (todo.id === action.payload.id) {
-                        todo = action.payload
+                    if (todo.id === action.payload) {
+                        console.log(todo)
+                        todo.completedAt = moment();
                     }
                     return todo;
                 })
@@ -45,6 +49,12 @@ export default function(state = initialState, action) {
                     }
                     return todo;
                 })
+            }
+        case UPDATE_TIME:
+        console.log("updated")
+            return {
+                ...state,
+                time: moment()
             }
         default:
             return state;

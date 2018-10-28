@@ -2,6 +2,10 @@
   margin-right: 0.5rem
 }
 
+.complete-btn {
+  margin-left: 0.5rem;
+}
+
 .addButton {
   margin-top: 1rem;
 }
@@ -22,4 +26,41 @@
 .fade-exit-active {
   opacity: 0.01;
   transition: opacity 1000ms ease-in;
+}
+
+.list-group-item {
+  margin-top: 10px;
+}
+
+.todo-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between  
+}
+
+.todo-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between  
+}
+
+.todo-time {
+  display: flex;
+  flex-direction: row;
+}
+
+.todo-complete-to {
+  margin-left: 5px;
+}
+
+.black {
+  color: black;
+}
+
+.red {
+  color: red
+}
+
+.green {
+  color: green;
 }

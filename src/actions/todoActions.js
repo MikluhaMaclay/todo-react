@@ -14,7 +14,6 @@ export const addTodo = (todo) => {
 }
 
 export const deleteTodo = (id) => {
-    console.log(id)
     return {
         type: DELETE_TODO,
         payload: id
