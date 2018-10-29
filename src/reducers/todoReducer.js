@@ -1,7 +1,9 @@
 import { GET_TODOS, DELETE_TODO, ADD_TODO, COMPLETE_TODO, EDIT_TODO, UPDATE_TIME } from '../actions/types';
 import moment from 'moment'
 
-const initialState = {}
+const initialState = {
+  todos : []
+}
 
 export default function (state = initialState, action) {
 
