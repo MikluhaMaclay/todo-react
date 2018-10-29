@@ -69,7 +69,6 @@ class Todo extends Component {
         } = this.props.todo;
 
         if (this.state.edit) {
-            console.log('1')
             return <AddTodo todo={this.props.todo} clear={this.clearEdit} />
         } else {
             return <CSSTransition key={id} timeout={900} classNames="fade">

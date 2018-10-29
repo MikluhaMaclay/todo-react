@@ -11,130 +11,113 @@ import AddTodo from './AddTodo'
 
 
 class TodoList extends Component {
+  state = {
+    shouldEdit: null,
+    shouldAdd: false,
+    filter: 'all',
+  }
 
-    constructor() {
-        super();
-        this.state = {
-            addForm: false,
-            filter: 'all'
+  componentDidMount() {
+      const tick = 10000;
+      this.interval = setInterval(this.props.updateTime, tick);
+      // this.props.getTodos();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  editHandler = (id, name, description, shouldCompleteAt, importance, completedAt) => {
+      this.clearForm();
+      this.setState({
+        shouldEdit: {
+          id,
+          name,
+          description,
+          shouldCompleteAt: shouldCompleteAt || moment(),
+          importance,
+          completedAt,
         }
+      });
+  }
 
+  deleteHandler = (id) => {
+    this.props.deleteTodo(id);
+  }
+
+  handleAdd = () => {
+    this.clearForm();
+    this.setState({ shouldAdd: true });
+  }
+
+  handleComplete = (id) => {
+      this.props.completeTodo(id);
+  }
+
+  handleFilterChange = e => {
+      e.preventDefault();
+      this.setState({ filter: e.target.value });
+  }
+
+  clearForm = () => {
+    this.setState({ shouldAdd: false });
+  }
+
+
+  renderTime = (shouldCompleteAt, completedAt) => {
+    if (shouldCompleteAt === null || shouldCompleteAt === undefined || !moment(shouldCompleteAt).isValid()) {
+      return null
+    } else {
+      return (
+        <div>
+          Complete till
+          <span className={"todo-complete-to " + (completedAt ? "green" : this.props.todos.time > moment(shouldCompleteAt) ? "red" : "black")}>
+            {moment(shouldCompleteAt).format('Do MMMM h:mm')}
+          </span>
+        </div>
+      )
     }
-    
-    componentDidMount() {
-        const tick = 10000;
-        setInterval(this.props.updateTime, tick)
-        // this.props.getTodos();
-        
-    }
-
-    editHandler = (id, name, description, shouldCompleteAt, importance, completedAt) => {
-        this.clearForm();
-        this.setState({
-            id,
-            name,
-            description,
-            shouldCompleteAt: shouldCompleteAt || moment(),
-            importance,
-            completedAt
-        })
-    }
-
-    deleteHandler = (id) => {
-        console.log('22')
-        this.props.deleteTodo(id)
-    }
-
-    handleAdd = () => {
-        this.clearForm();
-        this.setState({
-            addForm: true
-        })
-    }
-
-    renderForm = () => {
-        if (this.state.addForm) {
-            return <AddTodo clear={this.clearForm} />
-        }
-    }
-
-    handleComplete = (id) => {
-        this.props.completeTodo(id);
-    }
-
-    handleFilterChange = e => {
-        console.log(e)
-        e.preventDefault();
-        this.setState({
-            filter: e.target.value
-        })
-    }
-
-    clearForm = () => {
-        this.setState({
-            addForm: false
-        })
-    }
-
-
-    renderTime = (shouldCompleteAt, completedAt) => {
-        if (shouldCompleteAt === null || shouldCompleteAt === undefined || !moment(shouldCompleteAt).isValid()) {
-            return null
-        } else {
-            return <div>Complete till <span className={"todo-complete-to " + (completedAt ? "green" : this.props.todos.time > moment(shouldCompleteAt) ? "red" : "black")}>{moment(shouldCompleteAt).format('Do MMMM h:mm')}</span></div>
-        }
-    }
-
-    renderTodo = (todo) => {
-        if (this.state.filter !== 'all' && todo.importance !== this.state.filter) {
-            return null
-        } else if (this.state.id !== undefined && this.state.id === todo.id) {
-            return <AddTodo key={todo.id} clearForm={this.clearForm} todo={todo} />
-        } else {
-            return <Todo key={todo.id} todo={todo} time={this.props.time} />
-        }
-    }
-
-    render() {
-        console.log('1')
-        return (
-            <Container>
-                <Input type="select"
-                    value={this.state.filter}
-                    onChange={this.handleFilterChange}>
-                    <option>all</option>
-                    <option>normal</option>
-                    <option>important</option>
-                    <option>very important</option>
-                </Input>
-                <ListGroup>
-                    <TransitionGroup className="todo-list">
-                        {this.props.todos.todos.map((todo) => {
-                            return (this.renderTodo(todo))
-                        })}
-                    </TransitionGroup>
-                </ListGroup>
-                {this.renderForm(this.state.addForm, null, "add")}
-                <Button
-                    className="addButton"
-                    color="dark"
-                    style={{ marginBottom: '2rem' }}
-                    onClick={() => {
-                        this.handleAdd();
-                    }}
-                >
-                    Add Todo
-                </Button>
-
-            </Container>
-        )
-    }
+  }
+  //удалил элементы реакт бутстрапа и все заработало
+  render() {
+    const { todos } = this.props;
+    const { shouldAdd, filter, shouldEdit } = this.state;
+    return (
+      <Container>
+        <Input type="select"
+          value={filter}
+          onChange={this.handleFilterChange}
+        >
+          <option>all</option>
+          <option>normal</option>
+          <option>important</option>
+          <option>very important</option>
+        </Input>
+          {todos
+            .filter(todo => filter === 'all' || todo.importance === filter)
+            .map(todo => shouldEdit && shouldEdit.id === todo.id ?
+              <AddTodo key={todo.id} clearForm={this.clearForm} todo={todo} /> :
+              <Todo key={todo.id} todo={todo} time={this.props.time} />
+            )
+          }
+      {shouldAdd && <AddTodo clear={this.clearForm} />}
+      <Button
+          className="addButton"
+          color="dark"
+          style={{ marginBottom: '2rem' }}
+          onClick={this.handleAdd}
+      >
+          Add Todo
+      </Button>
+      </Container>
+    )
+  }
 }
 
 const mapStateToProps = (state) => ({
-    todos: state.todos,
+    todos: state.todos.todos,
     time: state.todos.time,
-    filter: state.todos.filter
+    filter: state.todos.filter,
 })
 
 export default connect(mapStateToProps, { getTodos, deleteTodo, addTodo, editTodo, updateTime, completeTodo })(TodoList);
