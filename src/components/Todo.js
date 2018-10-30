@@ -23,6 +23,9 @@ class Todo extends Component {
 
   handleComplete = (id) => {
     this.props.completeTodo(id);
+    this.setState({
+      ...this.state
+    })
   }
 
   // Рендер времени туду и его цвета

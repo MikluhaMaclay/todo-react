@@ -64,13 +64,14 @@ class TodoList extends Component {
   // Фильтр листа
   renderTodoList = (todo) => {
     if (this.state.filter === 'all' || todo.importance === this.state.filter) {
-      return <Todo key={todo.id} todo={todo} time={this.props.time} />
+      return <Todo key={todo.id} todo={todo}  />
     } else {
       return null
     }
   }
 
   render() {
+    console.log('1')
     return (
       <Container>
         <Input type="select"
@@ -105,8 +106,7 @@ class TodoList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ...state.todos,
-  time: state.todos.time,
+  ...state.todos
 })
 
 export default connect(mapStateToProps, { overdueTodo })(TodoList);

@@ -27,6 +27,7 @@ class AddTodo extends Component {
         ...this.props.todo
       })
     }
+    console.log(this.state.shouldCompleteAt)
   }
 
   deleteHandler = () => {
@@ -65,7 +66,7 @@ class AddTodo extends Component {
       id: this.state.id,
       name: this.state.name,
       description: this.state.description,
-      shouldCompleteAt: moment(this.state.shouldCompleteAt),
+      shouldCompleteAt: this.state.shouldCompleteAt,
       importance: this.state.importance,
       completedAt: this.completedAt || null,
       isOverdue: this.state.isOverdue
@@ -82,7 +83,7 @@ class AddTodo extends Component {
   renderDatepicker = () => {
     if (this.state.shouldCompleteAt !== null && this.state.shouldCompleteAt !== undefined) {
       return (<DatePicker className="todo-complete-to"
-        selected={moment(this.state.shouldCompleteAt || '')}
+        selected={moment(this.state.shouldCompleteAt) || ''}
         onChange={this.handleDateChange}
         showTimeSelect
         timeFormat="HH:mm"
@@ -106,7 +107,6 @@ class AddTodo extends Component {
   render() {
     return (
       <ListGroupItem>
-        <Form>
           <div className="todo-header">
             <div className="todo-title">
               <Input type="text"
@@ -155,7 +155,6 @@ class AddTodo extends Component {
                 }>Submit</Button>
             </div>
           </div>
-        </Form>
       </ListGroupItem>
     )
   }
