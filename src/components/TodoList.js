@@ -50,6 +50,7 @@ class TodoList extends Component {
   // Обработка изсенений фильтра
   handleFilterChange = e => {
     e.preventDefault();
+    console.log(e.target.value)
     this.setState({
       filter: e.target.value
     })
@@ -77,10 +78,10 @@ class TodoList extends Component {
         <Input type="select"
           value={this.state.filter}
           onChange={this.handleFilterChange}>
-          <option>all</option>
-          <option>normal</option>
-          <option>important</option>
-          <option>very important</option>
+          <option value="all">All</option>
+          <option value="normal">Normal</option>
+          <option value="important">Important</option>
+          <option value="very important">Very important</option>
         </Input>
 
         <ListGroup>
