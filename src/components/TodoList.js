@@ -1,34 +1,38 @@
 import React, { Component } from 'react';
 import { Container, ListGroup, Button, Input } from 'reactstrap';
 import { connect } from 'react-redux';
-import { updateTime } from '../actions/todoActions';
+import { overdueTodo } from '../actions/todoActions';
 import 'bootstrap/dist/css/bootstrap.css'
 import Todo from './Todo'
 import 'react-datepicker/dist/react-datepicker.css';
 import AddTodo from './AddTodo'
+import moment from 'moment'
 
 
 class TodoList extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      addForm: false,
-      filter: 'all'
-    }
-
+  state = {
+    addForm: false,
+    filter: 'all'
   }
 
   componentDidMount() {
     // время тика таймера
     const tick = 1000;
-    this.interval = setInterval(this.props.updateTime, tick)
+    this.interval = setInterval(this.checkOverdue, tick)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
+  checkOverdue = () => {
+    this.props.todos.map(todo => {
+      if(moment(todo.shouldCompleteAt) < moment() && !todo.isOverdue) {
+        this.props.overdueTodo(todo.id)
+      }
+    })
+  }
 
   // Обработка добавления
   handleAdd = () => {
@@ -105,4 +109,4 @@ const mapStateToProps = (state) => ({
   time: state.todos.time,
 })
 
-export default connect(mapStateToProps, { updateTime })(TodoList);
+export default connect(mapStateToProps, { overdueTodo })(TodoList);

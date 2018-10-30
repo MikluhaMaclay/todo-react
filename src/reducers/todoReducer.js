@@ -1,4 +1,4 @@
-import { GET_TODOS, DELETE_TODO, ADD_TODO, COMPLETE_TODO, EDIT_TODO, UPDATE_TIME } from '../actions/types';
+import { GET_TODOS, DELETE_TODO, ADD_TODO, COMPLETE_TODO, EDIT_TODO, OVERDUE_TODO } from '../actions/types';
 import moment from 'moment'
 
 const initialState = {
@@ -42,10 +42,15 @@ export default function (state = initialState, action) {
           return todo;
         })
       }
-    case UPDATE_TIME:
+    case OVERDUE_TODO:
       return {
         ...state,
-        time: moment()
+        todos: state.todos.map(todo => {
+          if (todo.id === action.payload) {
+            todo.isOverdue = true;
+          }
+          return todo;
+        })
       }
     default:
       return state;

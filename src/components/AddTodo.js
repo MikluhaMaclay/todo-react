@@ -11,16 +11,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 class AddTodo extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      id: -1,
-      name: '',
-      description: '',
-      shouldCompleteAt: null,
-      importance: 'normal',
-      completedAt: null
-    }
+  state = {
+    id: -1,
+    name: '',
+    description: '',
+    shouldCompleteAt: null,
+    importance: 'normal',
+    completedAt: null,
+    isOverdue: false
   }
 
   componentDidMount() {
@@ -69,7 +67,8 @@ class AddTodo extends Component {
       description: this.state.description,
       shouldCompleteAt: moment(this.state.shouldCompleteAt),
       importance: this.state.importance,
-      completedAt: this.completedAt || null
+      completedAt: this.completedAt || null,
+      isOverdue: this.state.isOverdue
     }
     if (this.props.todo) {
       this.props.editTodo(todo)

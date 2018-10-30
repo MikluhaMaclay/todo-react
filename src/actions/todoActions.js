@@ -1,4 +1,4 @@
-import { GET_TODOS, ADD_TODO, DELETE_TODO, COMPLETE_TODO, EDIT_TODO, UPDATE_TIME } from './types';
+import { GET_TODOS, ADD_TODO, DELETE_TODO, COMPLETE_TODO, EDIT_TODO, OVERDUE_TODO } from './types';
 
 export const getTodos = () => {
   return {
@@ -34,8 +34,9 @@ export const completeTodo = (todo) => {
   }
 }
 
-export const updateTime = () => {
+export const overdueTodo = (todo) => {
   return {
-    type: UPDATE_TIME
+    type: OVERDUE_TODO,
+    payload: todo
   }
 }

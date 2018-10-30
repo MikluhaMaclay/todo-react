@@ -6,12 +6,11 @@ import moment from 'moment';
 import AddTodo from './AddTodo'
 
 class Todo extends Component {
-  constructor() {
-    super();
-    this.state = {
-      edit: false
-    }
+
+  state = {
+    edit: false
   }
+
   editHandler = () => {
     this.setState({
       edit: true
@@ -27,11 +26,11 @@ class Todo extends Component {
   }
 
   // Рендер времени туду и его цвета
-  renderTime = (shouldCompleteAt, completedAt) => {
+  renderTime = (shouldCompleteAt, completedAt, isOverdue) => {
     if (shouldCompleteAt === null || shouldCompleteAt === undefined || !moment(shouldCompleteAt).isValid()) {
       return null
     } else {
-      return <div>Complete till <span className={"todo-complete-to " + (completedAt ? "green" : this.props.time > moment(shouldCompleteAt) ? "red" : "black")}>{moment(shouldCompleteAt).format('Do MMMM h:mm')}</span></div>
+      return <div>Complete till <span className={"todo-complete-to " + (completedAt ? "green" : isOverdue || moment(shouldCompleteAt) < moment() ? "red" : "black")}>{moment(shouldCompleteAt).format('Do MMMM h:mm')}</span></div>
     }
   }
   // Убрать форму редактирования
@@ -49,7 +48,8 @@ class Todo extends Component {
       importance,
       shouldCompleteAt,
       completedAt,
-      id
+      id,
+      isOverdue
     } = this.props.todo;
 
     if (this.state.edit) {
@@ -87,7 +87,7 @@ class Todo extends Component {
                         </Button>
 
           <div className="todo-time">
-            {this.renderTime(shouldCompleteAt, completedAt)}
+            {this.renderTime(shouldCompleteAt, completedAt, isOverdue)}
           </div>
 
           <div className="change-buttons">
